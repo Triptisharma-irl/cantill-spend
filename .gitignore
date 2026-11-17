@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Local data and model artifacts
+.cache/
+.models/
+data/
+*.pkl
+*.joblib
+
+# Local outputs
+outputs/
+*.csv
+
+# Blind-test submission outputs only
+!submission/
+submission/*
+!submission/*__A2.csv
+!submission/*__B2.csv
+!submission/*__C.csv
+submission/*_audit.csv
+
+# OS files
+.DS_Store
+!submission/C.json
+
+# Private challenge-specific configurations
+configs/A.json
+configs/B.json
