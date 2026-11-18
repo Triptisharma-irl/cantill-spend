@@ -1,0 +1,41 @@
+{
+  "company": "A",
+  "description": "Mining operations of a chemicals group. Two systems: SAP goods receipts (net, ZAR) and an AP invoice tool (gross incl. VAT).",
+  "reporting_currency": "ZAR",
+  "taxonomy": {"file": "taxonomy_A.csv", "levels": ["category_l1", "category_l2", "category_l3"]},
+  "labels": {"file": "labels_A.csv", "id": "record_id", "levels": ["category_l1", "category_l2", "category_l3"],
+             "supplier_key": "supplier_key", "item_key": "item_key"},
+  "dates": {"valid_from": "2015-01-01", "valid_to": "2026-12-31", "day_first": true},
+  "sources": [
+    {
+      "name": "ERP", "file": "erp_goods_receipts.csv", "id": "line_id", "record_prefix": "ERP:",
+      "amount": {"column": "value_zar", "basis": "net"},
+      "currency": {"value": "ZAR"},
+      "fields": {
+        "date": ["posting_date"], "supplier_name": "supplier_name", "supplier_id": "vendor_id",
+        "description": ["material_short_text", "service_short_text"], "item_code": "material_number",
+        "quantity": "quantity", "po": "po_number", "po_line": "po_item",
+        "context": ["spend_type", "material_type", "opex_capex", "contract_number"]
+      }
+    },
+    {
+      "name": "TOOL", "file": "invoice_tool_export.csv", "id": "tool_record_id", "record_prefix": "TOOL:",
+      "amount": {"column": "gross_amount", "basis": "gross", "tax_rate_column": "vat_rate", "default_tax_rate": 0.15},
+      "currency": {"column": "currency"},
+      "fields": {
+        "date": ["invoice_date"], "supplier_name": "supplier_name_as_captured",
+        "description": ["line_text"], "quantity": "quantity", "po": "po_reference",
+        "invoice": "invoice_number", "status": "status"
+      },
+      "po_pattern": "(45\\d{8})",
+      "po_line_pattern": "/(\\d+)"
+    }
+  ],
+  "combine": {"primary": "ERP", "secondary": "TOOL", "amount_tolerance": 0.05, "amount_tolerance_strict": 0.005,
+              "amount_abs_tolerance": 0.05, "nopo_amount_tolerance": 0.002, "nopo_min_text_similarity": 0.85},
+  "dedupe_within_source": {"TOOL": ["invoice_key", "amount_raw", "quantity"]},
+  "abbreviations": {
+    "cm": "continuous miner", "rb": "roof bolter", "sc": "shuttle car", "lhd": "load haul dumper", "fp": "flameproof",
+    "rof": "roof", "dril": "drill", "trnsp": "transport", "rd": "road"
+  }
+}

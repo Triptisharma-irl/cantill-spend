@@ -1,0 +1,28 @@
+{
+  "company": "B",
+  "description": "Metal packaging manufacturer. One AP invoice-line extract from 8 ERPs (JDE + SAP), 25 currencies, vendor IDs only.",
+  "reporting_currency": "USD",
+  "taxonomy": {"file": "taxonomy_B.csv", "levels": ["category_l1", "category_l2", "category_l3"]},
+  "labels": {"file": "seed_labels.csv", "id": "line_id", "levels": ["category_l1", "category_l2", "category_l3"],
+             "include": "include", "exclusion_reason": "exclusion_reason"},
+  "fx_table": {"file": "fx_rates_usd.csv", "currency": "currency", "month": "month", "rate": "units_per_usd",
+               "semantics": "units_per_reporting"},
+  "fx_line_rate_max_deviation": 2.0,
+  "dates": {"valid_from": "2020-01-01", "valid_to": "2025-12-31"},
+  "sources": [
+    {
+      "name": "AP", "file": "invoice_lines.csv", "id": "line_id",
+      "amount": {"column": "line_amount", "basis": "net"},
+      "currency": {"column": "currency"},
+      "fx": {"line_rate_column": "currency_rate", "date_field": "invoice_date", "fallback_date_field": "posting_date"},
+      "fields": {
+        "date": ["invoice_date", "posting_date"], "supplier_id": "vendor_id",
+        "description": ["line_description"], "item_code": "material_number", "quantity": "quantity",
+        "po": "po_number", "po_line": "po_line", "invoice": "invoice_number",
+        "gl_code": "gl_account", "gl_desc": "gl_account_description",
+        "supplier_type": "supplier_type", "document_type": "document_type",
+        "context": ["source_system", "po_type", "transport_flag", "company_code", "plant"]
+      }
+    }
+  ]
+}
