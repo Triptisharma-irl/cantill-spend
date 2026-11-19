@@ -1,0 +1,44 @@
+{
+  "company": "C",
+  "reporting_currency": "USD",
+  "taxonomy": {
+    "file": "category_tree_C.csv"
+  },
+  "dates": {
+    "valid_from": "2015-01-01",
+    "valid_to": "2026-12-31"
+  },
+  "sources": [
+    {
+      "name": "C",
+      "file": "invoice_lines.csv",
+      "id": "line_id",
+      "amount": {
+        "column": "line_amount_usd",
+        "basis": "net"
+      },
+      "currency": {
+        "value": "USD"
+      },
+      "fields": {
+        "date": [
+          "invoice_date",
+          "status_date"
+        ],
+        "supplier_name": "supplier_name",
+        "description": [
+          "invoice_description"
+        ],
+        "quantity": "quantity",
+        "status": "status",
+        "gl_desc": "gl_account_description",
+        "invoice": "invoice_number",
+        "context": [
+          "buyer_entity",
+          "submission_type",
+          "uom"
+        ]
+      }
+    }
+  ]
+}
